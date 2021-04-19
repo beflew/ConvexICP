@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-
 import os
 import sys
 import glob
@@ -10,15 +6,12 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 from torch.utils.data import Dataset
 
-# Part of the code is referred from: https://github.com/charlesq34/pointnet
-
-# # !ls
-# # !pwd
-BASE_DIR='c:/Users/yshao/Downloads/VOCtrainval_11-May-2012/DL/ICP/ConvexICP-master/ConvexICP-master'
-
+# !ls
+# !pwd
+# BASE_DIR='c:/Users/yshao/Downloads/VOCtrainval_11-May-2012/DL/ICP/ConvexICP-master/ConvexICP-master'
 
 def download():
-#     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = os.path.join(BASE_DIR, 'data')
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
@@ -29,14 +22,11 @@ def download():
         os.system('mv %s %s' % (zipfile[:-4], DATA_DIR))
         os.system('rm %s' % (zipfile))
 
-
-# +
 # download()
-# -
 
 def load_data(partition):
     download()
-#     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = os.path.join(BASE_DIR, 'data')
     all_data = []
     all_label = []
@@ -50,7 +40,6 @@ def load_data(partition):
     all_data = np.concatenate(all_data, axis=0)
     all_label = np.concatenate(all_label, axis=0)
     return all_data, all_label
-
 
 # Pick one
 item=5
@@ -71,7 +60,6 @@ def load_data_single(partition):
     all_label = np.concatenate(all_label, axis=0)
     return all_data[item], all_label[item]
 
-
 def translate_pointcloud(pointcloud):
     xyz1 = np.random.uniform(low=2. / 3., high=3. / 2., size=[3])
     xyz2 = np.random.uniform(low=-0.2, high=0.2, size=[3])
@@ -79,17 +67,11 @@ def translate_pointcloud(pointcloud):
     translated_pointcloud = np.add(np.multiply(pointcloud, xyz1), xyz2).astype('float32')
     return translated_pointcloud
 
-
 def jitter_pointcloud(pointcloud, sigma=0.01, clip=0.05):
     N, C = pointcloud.shape
     pointcloud += np.clip(sigma * np.random.randn(N, C), -1 * clip, clip)
     return pointcloud
 
-
-
-# Convexity conditions
-# load an picture
-# generate 3 point clouds
 
 
 
@@ -156,14 +138,11 @@ def RoT_random(pointcloud,lam=1,wt=None):
     # R_ab,translateion_ab - Wi
     return pointcloud2,l_w,(rotation_ab,translation_ab,R_ab)
 
-# +
-# # !pip install --upgrade matplotlib
-# # !conda install matplotlib --force
-# -
+# !pip install --upgrade matplotlib
+# !conda install matplotlib --force
 
 
 
-# +
 class ModelNet40Convex(Dataset):
     def __init__(self, num_points, partition='train', gaussian_noise=False, unseen=False, factor=4):
         self.data, self.label = load_data(partition)
@@ -217,6 +196,7 @@ class ModelNet40Convex(Dataset):
         
         pointcloud3=np.random.permutation(pointcloud3.T).T
         
+        pointcloud=pointcloud.T
         return pointcloud.astype('float32'),pointcloud1.astype('float32'),pointcloud2.astype('float32'),pointcloud3.astype('float32'),\
             mat_w1[1:],mat_w2[1:],mat_w3_0[1:],mat_w3_1[1:]
     
@@ -226,9 +206,6 @@ class ModelNet40Convex(Dataset):
 
     def __len__(self):
         return self.data.shape[0]
-
-
-# -
 
 class ModelNet40(Dataset):
     def __init__(self, num_points, partition='train', gaussian_noise=False, unseen=False, factor=4):
@@ -297,19 +274,15 @@ class ModelNet40(Dataset):
     def __len__(self):
         return self.data.shape[0]
 
-
-# +
 # # if __name__ == '__main__':
 # train = ModelNet40(1024)
 # test = ModelNet40(1024, 'test')
 # for data in train:
 #     print(len(data))
 #     break
-# -
 
 train_cvx=ModelNet40Convex(1024)
 
-# +
 # from torch.optim.lr_scheduler import MultiStepLR
 # # from data import ModelNet40,download,load_data
 
@@ -321,16 +294,13 @@ train_cvx=ModelNet40Convex(1024)
 # # out_cvx
 # train_cvx_loader = DataLoader(train_cvx, batch_size=128, shuffle=True, drop_last=True)
 
-# +
 # for batch_idx, content in enumerate(train_cvx_loader):
 #     (src, pointcloud1, pointcloud2, pointcloud3,mat1,mat2,mat3_0,mat3_1)= content
 #     print(batch_idx)
 #     break
 
-# +
 # len(mat1)
 
-# +
 # translation_ab1,R_ab1=mat1[0],mat1[1]
 
 # translation_ab2,R_ab2=mat2[0],mat2[1]
@@ -341,15 +311,12 @@ train_cvx=ModelNet40Convex(1024)
 # translation_ab3=translation_ab3_0+translation_ab3_1
 # R_ab3=R_ab3_0.matmul(R_ab3_1)
 
-# +
 # a=R_ab3[0,:,:]
 # a0=R_ab3_0[0,:,:]
 # a1=R_ab3_1[0,:,:]
 
-# +
 # a,a0.matmul(a1)
 
-# +
 # anglex = np.random.uniform() * np.pi / 1
 # angley = np.random.uniform() * np.pi / 1
 # anglez = np.random.uniform() * np.pi / 1
@@ -371,15 +338,11 @@ train_cvx=ModelNet40Convex(1024)
 #                 [0, 0, 1]])
 # R_ab = Rx.dot(Ry).dot(Rz)
 
-# +
 # anglex,angley,anglez
 
-# +
 # np.random.uniform(0,1)
 
-# +
 # mat=Rx.dot(Ry).dot(Rz)
 # mat.dot(mat)
-# -
 
 
