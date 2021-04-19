@@ -298,26 +298,88 @@ class ModelNet40(Dataset):
         return self.data.shape[0]
 
 
-if __name__ == '__main__':
-    train = ModelNet40(1024)
-    test = ModelNet40(1024, 'test')
-    for data in train:
-        print(len(data))
-        break
+# +
+# # if __name__ == '__main__':
+# train = ModelNet40(1024)
+# test = ModelNet40(1024, 'test')
+# for data in train:
+#     print(len(data))
+#     break
+# -
 
 train_cvx=ModelNet40Convex(1024)
 
 # +
-from torch.optim.lr_scheduler import MultiStepLR
-# from data import ModelNet40,download,load_data
+# from torch.optim.lr_scheduler import MultiStepLR
+# # from data import ModelNet40,download,load_data
 
-# from data import ModelNet40Convex,download,load_data
-from data_convex import ModelNet40Convex,download,load_data
-import numpy as np
-from torch.utils.data import DataLoader
+# # from data import ModelNet40Convex,download,load_data
+# from data_convex import ModelNet40Convex,download,load_data
+# import numpy as np
+# from torch.utils.data import DataLoader
 
-# out_cvx
-train_cvx_loader = DataLoader(train_cvx, batch_size=128, shuffle=True, drop_last=True)
+# # out_cvx
+# train_cvx_loader = DataLoader(train_cvx, batch_size=128, shuffle=True, drop_last=True)
+
+# +
+# for batch_idx, content in enumerate(train_cvx_loader):
+#     (src, pointcloud1, pointcloud2, pointcloud3,mat1,mat2,mat3_0,mat3_1)= content
+#     print(batch_idx)
+#     break
+
+# +
+# len(mat1)
+
+# +
+# translation_ab1,R_ab1=mat1[0],mat1[1]
+
+# translation_ab2,R_ab2=mat2[0],mat2[1]
+
+# translation_ab3_0,R_ab3_0=mat3_0[0],mat3_0[1]
+# translation_ab3_1,R_ab3_1=mat3_1[0],mat3_1[1]
+
+# translation_ab3=translation_ab3_0+translation_ab3_1
+# R_ab3=R_ab3_0.matmul(R_ab3_1)
+
+# +
+# a=R_ab3[0,:,:]
+# a0=R_ab3_0[0,:,:]
+# a1=R_ab3_1[0,:,:]
+
+# +
+# a,a0.matmul(a1)
+
+# +
+# anglex = np.random.uniform() * np.pi / 1
+# angley = np.random.uniform() * np.pi / 1
+# anglez = np.random.uniform() * np.pi / 1
+
+# cosx = np.cos(anglex)
+# cosy = np.cos(angley)
+# cosz = np.cos(anglez)
+# sinx = np.sin(anglex)
+# siny = np.sin(angley)
+# sinz = np.sin(anglez)
+# Rx = np.array([[1, 0, 0],
+#                 [0, cosx, -sinx],
+#                 [0, sinx, cosx]])
+# Ry = np.array([[cosy, 0, siny],
+#                 [0, 1, 0],
+#                 [-siny, 0, cosy]])
+# Rz = np.array([[cosz, -sinz, 0],
+#                 [sinz, cosz, 0],
+#                 [0, 0, 1]])
+# R_ab = Rx.dot(Ry).dot(Rz)
+
+# +
+# anglex,angley,anglez
+
+# +
+# np.random.uniform(0,1)
+
+# +
+# mat=Rx.dot(Ry).dot(Rz)
+# mat.dot(mat)
 # -
 
 
