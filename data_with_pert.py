@@ -122,7 +122,9 @@ class ModelNet40_pert(Dataset):
         translation_ab_perts = np.array(translation_ab_perts)
         
         translation_ba = -R_ba.dot(translation_ab)
-
+        
+        lambdas = np.random.uniform(0,1,self.n_pert)
+            
         pointcloud1 = pointcloud.T
 
         rotation_ab = Rotation.from_euler('zyx', [anglez, angley, anglex])
@@ -136,7 +138,8 @@ class ModelNet40_pert(Dataset):
 
         return pointcloud1.astype('float32'), pointcloud2.astype('float32'), R_ab.astype('float32'), \
                translation_ab.astype('float32'), R_ba.astype('float32'), translation_ba.astype('float32'), \
-               euler_ab.astype('float32'), euler_ba.astype('float32'), R_ab_perts.astype('float32'), translation_ab_perts.astype('float32')
+               euler_ab.astype('float32'), euler_ba.astype('float32'), R_ab_perts.astype('float32'), translation_ab_perts.astype('float32'), \
+              lambdas.astype('float32')
 
     def __len__(self):
         return self.data.shape[0]
